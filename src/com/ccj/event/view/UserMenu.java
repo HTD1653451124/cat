@@ -70,7 +70,6 @@ public class UserMenu extends Start {
 
 
         //加载场景
-
         Group group = new Group(lineX,lineY,seeLog,vName,t_serach,b_serach,recharge,pagination1);
         Scene scene = new Scene(group);
         stage.setScene(scene);

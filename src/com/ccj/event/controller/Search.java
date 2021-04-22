@@ -92,7 +92,7 @@ public class Search extends Application {
            pagination.setStyle("-fx-border-color:red;");
            String finalVirName = virName;
            Integer finalUid = uid;
-           pagination.setPageFactory((Integer pageIndex) ->createPage(result, finalVirName, finalUid,pageIndex,seeLog));
+           pagination.setPageFactory((Integer pageIndex) ->createPage(result, finalVirName, finalUid,pageIndex,account,seeLog));
 
            Group group = new Group(lineX,lineY,vName,t_serach,b_serach,pagination,seeLog,recharge);
            Scene scene = new Scene(group);
@@ -109,7 +109,7 @@ public class Search extends Application {
         /*
         * 根据模糊查询结果创建page
         * */
-    private VBox createPage(Map<ScenicInfoTable, TicketTable> result, String vName, Integer uid, int pageIndex,  Button seeLog) {
+    private VBox createPage(Map<ScenicInfoTable, TicketTable> result, String vName, Integer uid, int pageIndex,String account,  Button seeLog) {
         GetPayPassword getPayPassword1 = new GetPayPassword();
         VBox box = new VBox(5);
         String payPassword = getPayPassword1.getPayPassword(vName);
@@ -163,6 +163,9 @@ public class Search extends Application {
             buy.setLayoutX(layoutX);
             buy.setLayoutY(layoutY);
 
+            if (account.equals("游客")){
+                buy.setVisible(false);
+            }
 
             Buy buy1 = new Buy();
             buy1.buy(buy,payPassword,uid,price,sid,ticketNumber);
