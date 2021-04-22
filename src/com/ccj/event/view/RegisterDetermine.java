@@ -1,24 +1,19 @@
 package com.ccj.event.view;
 
-import com.ccj.event.dao.LoginCheck;
-import com.ccj.event.dao.Sql;
 import com.ccj.event.entity.UserTable;
 import com.ccj.event.service.Check;
-import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import com.ccj.event.service.IsRepeat;
+import com.ccj.event.service.Register;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import java.awt.*;
 
 public class RegisterDetermine extends Start{
     UserTable user = new UserTable();
     public void determine(Button button,TextField inputName ,TextField intputVirtualName,PasswordField inputPassword1,PasswordField inputPassword2,PasswordField inputPassword3,PasswordField inputPassword4){
 
+        Register register1 = new Register();
         //点击注册
         button.setOnMouseClicked(mouseEvent -> {
             //获取文本框和密码框的输入
@@ -34,9 +29,9 @@ public class RegisterDetermine extends Start{
             //先检查数据的合法性，再用sql语句传输进数据库，最后加载提示弹窗
             Check check = new Check();
             if (check.checkRegister(username,virtualName,password1,password2,password3,password4)){
-                Sql sql = new Sql();
-                if (sql.isRepeat(username)){
-                    if (sql.register(virtualName,username,password1,password3)){
+                IsRepeat isRepeat1 = new IsRepeat();
+                if (isRepeat1.isRepeat(username)){
+                    if (register1.register(virtualName,username,password1,password3)){
                         tips("注册成功");
                     }else {
                         tips("注册失败");

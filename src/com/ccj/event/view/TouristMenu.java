@@ -2,15 +2,15 @@ package com.ccj.event.view;
 
 import com.ccj.event.controller.Comment;
 import com.ccj.event.controller.Search;
-import com.ccj.event.dao.Sql;
 import com.ccj.event.entity.ScenicInfoTable;
 import com.ccj.event.entity.TicketTable;
+import com.ccj.event.service.GetScenicInfo;
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.util.Date;
@@ -19,6 +19,11 @@ import java.util.Map;
 public class TouristMenu extends Application {
     public void touristMenu(Button button){
         button.setOnMouseClicked(event -> {
+
+            //设置横线
+            Line lineX = new Line(100,0,100,1000);
+            //设置竖线，两条线分割整个视窗
+            Line lineY = new Line(0,100,1000,100);
             //设置搜素框
             TextField t_serach = new TextField();
             Button b_serach = new Button("搜索");
@@ -27,8 +32,6 @@ public class TouristMenu extends Application {
             t_serach.setPrefWidth(700);
             b_serach.setLayoutY(30);
             b_serach.setLayoutX(900);
-
-
 
             //设置分页
             Pagination pagination = new Pagination();
@@ -40,7 +43,7 @@ public class TouristMenu extends Application {
 
             //加载场景
             Stage stage = new Stage();
-            Group group = new Group(t_serach,b_serach,pagination);
+            Group group = new Group(lineX,lineY,t_serach,b_serach,pagination);
             Scene scene = new Scene(group);
             stage.setScene(scene);
             stage.setHeight(1000);
@@ -54,11 +57,12 @@ public class TouristMenu extends Application {
     }
 
     private VBox createPage(Integer pageIndex) {
-        Sql sql = new Sql();
-        Map<ScenicInfoTable, TicketTable> result = sql.getScenicInfo();
+        GetScenicInfo getScenicInfo1 = new GetScenicInfo();
+        Map<ScenicInfoTable, TicketTable> result = getScenicInfo1.getScenicInfo();
         VBox box = new VBox(5);
         int page = pageIndex * 5;
         int i = page;
+        //用循环显示景点信息
         for (ScenicInfoTable sc : result.keySet()) {
             int sid = i+1;
             if (i>= result.size())break;;

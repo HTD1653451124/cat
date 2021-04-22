@@ -1,11 +1,12 @@
 package com.ccj.event.controller;
 
-import com.ccj.event.dao.Sql;
 import com.ccj.event.entity.ScenicInfoTable;
 import com.ccj.event.entity.TicketTable;
+import com.ccj.event.service.FuzzyQuery;
+import com.ccj.event.service.GetPayPassword;
+import com.ccj.event.service.GetVirName;
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -14,8 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-
-import java.awt.*;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -25,7 +24,9 @@ public class Search extends Application {
 
    public void search (Button button, TextField input,Stage stage,String account){
        button.setOnMouseClicked(event -> {
-           Sql sql = new Sql();
+           FuzzyQuery fuzzyQuery = new FuzzyQuery();
+           GetVirName getVirName1 = new GetVirName();
+           //Sql sql = new Sql();
            //添加场景
            //设置横线
            Line lineX = new Line(100,0,100,1000);
@@ -43,19 +44,28 @@ public class Search extends Application {
 
            //查看日志
            Button seeLog = new Button("购票历史");
-
            seeLog.setLayoutX(10);
            seeLog.setLayoutY(120);
+           //如果是游客则设置不可见
+           if (account.equals("游客")){
+               seeLog.setVisible(false);
+           }
 
            //提升作用域
            final String clue = input.getText();
-           final Map<ScenicInfoTable, TicketTable> result  = sql.fuzzyQuery(clue);
+           final Map<ScenicInfoTable, TicketTable> result  = fuzzyQuery.fuzzyQuery(clue);
            Label vName = new Label();
 
            //充值
            Button recharge = new Button("充值");
            recharge.setLayoutX(20);
            recharge.setLayoutY(180);
+           //如果时游客设置不可见
+           if (account.equals("游客")){
+               recharge.setVisible(false);
+           }
+
+
            Recharge re = new Recharge();
            re.raiseMoneyMenu(recharge,account);
            String virName = "游客";
@@ -63,7 +73,7 @@ public class Search extends Application {
            //不是游客的情况下才获取昵称
            if (!account.equals("游客")){
                //获取昵称
-               Map<Integer,String> map = sql.getVirName(account);
+               Map<Integer,String> map = getVirName1.getVirName(account);
                Set<Integer> set = map.keySet();
                Iterator<Integer> it = set.iterator();
                uid = it.next();
@@ -76,13 +86,13 @@ public class Search extends Application {
            }
 
            Pagination pagination = new Pagination();
-           pagination.setLayoutX(150);
+           pagination.setLayoutX(100);
            pagination.setLayoutY(100);
            pagination.setMinSize(800,850);
            pagination.setStyle("-fx-border-color:red;");
            String finalVirName = virName;
            Integer finalUid = uid;
-           pagination.setPageFactory((Integer pageIndex) ->createPage(result, finalVirName, finalUid,pageIndex,sql,seeLog));
+           pagination.setPageFactory((Integer pageIndex) ->createPage(result, finalVirName, finalUid,pageIndex,seeLog));
 
            Group group = new Group(lineX,lineY,vName,t_serach,b_serach,pagination,seeLog,recharge);
            Scene scene = new Scene(group);
@@ -99,9 +109,10 @@ public class Search extends Application {
         /*
         * 根据模糊查询结果创建page
         * */
-    private VBox createPage(Map<ScenicInfoTable, TicketTable> result, String vName, Integer uid, int pageIndex, Sql sql, Button seeLog) {
+    private VBox createPage(Map<ScenicInfoTable, TicketTable> result, String vName, Integer uid, int pageIndex,  Button seeLog) {
+        GetPayPassword getPayPassword1 = new GetPayPassword();
         VBox box = new VBox(5);
-        String payPassword = sql.getPayPassword(vName);
+        String payPassword = getPayPassword1.getPayPassword(vName);
         int size = result.size();
         int page = pageIndex * 5;
         int i = page;

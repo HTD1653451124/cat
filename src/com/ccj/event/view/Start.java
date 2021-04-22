@@ -18,14 +18,11 @@ public class Start extends Application{
         TextField t_name = new TextField();
         PasswordField p_password = new PasswordField();
 
-        //选择记住密码时显示密码setText
-        //p_password.setText("sadsa");
-
         Button b_login = new Button("登录");
         Button b_register = new Button("注册");
         Button b_adm = new Button("管理员登录");
         Button b_tour = new Button("游客登陆");
-        CheckBox ck2 = new CheckBox("记住密码");
+
 
 
         /*------------设置位置---------------------*/
@@ -37,8 +34,8 @@ public class Start extends Application{
         gr.add(b_login,0,2);
         gr.add(b_register,1,2 );
         gr.add(b_adm,2,2);
-        gr.add(b_tour,1,4);
-        gr.add(ck2,2,4);
+        gr.add(b_tour,2,3);
+
 
         gr.setHgap(5);
         gr.setVgap(10);
@@ -57,13 +54,11 @@ public class Start extends Application{
         String password = p_password.getText();
 
 
-
         //点击注册按钮
         Register register = new Register();
         register.regieter(b_register);
 
         //点击登录按钮,点击管理员按钮(管理员不能注册，已提前设置管理员，只能登录，账号：11110000，密码：00001111)
-
         Login click_login = new Login();
         click_login.login(b_login,b_adm,t_name,p_password);
 

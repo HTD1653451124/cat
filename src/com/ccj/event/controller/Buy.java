@@ -1,33 +1,24 @@
 package com.ccj.event.controller;
 
-import com.ccj.event.controller.Buy;
-import com.ccj.event.dao.Sql;
-import com.ccj.event.entity.ScenicInfoTable;
-import com.ccj.event.entity.TicketTable;
+import com.ccj.event.service.GetLogId;
+import com.ccj.event.service.InsertLog;
+import com.ccj.event.service.Pay;
+import com.ccj.event.service.SetTicket;
 import com.ccj.event.view.UserMenu;
-import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import javafx.scene.control.Pagination;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import java.awt.*;
-import java.text.DateFormat;
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Buy extends UserMenu {
 
     public void buy (Button buyTicket, String payPassword, Integer uid, Double price, Integer sid , int ticketNumber){
-        Sql sql = new Sql();
+        GetLogId getLogId1 = new GetLogId();
+        Pay pay1 = new Pay();
         //点击购票按钮
         buyTicket.setOnMouseClicked(event -> {
 
@@ -52,6 +43,8 @@ public class Buy extends UserMenu {
 
             //点击确认按钮
             determine.setOnMouseClicked(event1 -> {
+                InsertLog insertLog1 = new InsertLog();
+                SetTicket setTicket1 = new SetTicket();
 
                 //获取当前时间
                 SimpleDateFormat df = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
@@ -60,15 +53,15 @@ public class Buy extends UserMenu {
                 //判断密码是否正确
                 if (pay.getText().equals(payPassword)){
                     //判断余额是否足够
-                    if (sql.pay(uid, price)){
+                    if (pay1.pay(uid, price)){
                         //判断票数是否有剩余
                         if ( ticketNumber > 0 ){
                             //向日志中添加记录
-                            boolean insertLog = sql.insertLog(sid,now);
+                            boolean insertLog = insertLog1.insertLog(sid,now);
                             //获取最新的日志id
-                            Integer lid = sql.getLogId();
+                            Integer lid = getLogId1.getLogId();
                             //更改ticket表中数据
-                            boolean setTicket = sql.setTicket(sid,uid,lid);
+                            boolean setTicket = setTicket1.setTicket(sid,uid,lid);
                             if (insertLog && setTicket){
                                 //显示成功窗口提示
                                 tips("购票成功");

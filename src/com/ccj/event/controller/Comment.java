@@ -1,6 +1,6 @@
 package com.ccj.event.controller;
 
-import com.ccj.event.dao.Sql;
+import com.ccj.event.service.GetComment;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -8,18 +8,16 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import sun.awt.image.ImageWatched;
 
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 public class Comment extends Application {
 
     public void visitComment(Hyperlink link,Integer sid){
-        Sql sql = new Sql();
+        //Sql sql = new Sql();
+        GetComment getComment = new GetComment();
         VBox box1 = new VBox(5);
-        Map<String, String> comment = sql.getComment(sid);
+        Map<String, String> comment = getComment.getComment(sid);
         for (String vname : comment.keySet()) {
             VBox elem = new VBox();
             String content = comment.get(vname);

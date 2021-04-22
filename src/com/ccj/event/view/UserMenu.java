@@ -1,38 +1,29 @@
 package com.ccj.event.view;
 
 import com.ccj.event.controller.*;
-import com.ccj.event.dao.Sql;
 import com.ccj.event.entity.ScenicInfoTable;
 import com.ccj.event.entity.TicketTable;
-import javafx.application.Application;
+import com.ccj.event.service.GetPayPassword;
+import com.ccj.event.service.GetScenicInfo;
+import com.ccj.event.service.GetVirName;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.scene.control.Pagination;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 public class UserMenu extends Start {
     public void mainMenu(String account){
-
-
+        GetVirName getVirName1 = new GetVirName();
         //添加场景
         //设置横线
         Line lineX = new Line(100,0,100,1000);
         //设置竖线，两条线分割整个视窗
         Line lineY = new Line(0,100,1000,100);
-
 
         //设置搜索框
         TextField t_serach = new TextField();
@@ -42,8 +33,6 @@ public class UserMenu extends Start {
         t_serach.setPrefWidth(700);
         b_serach.setLayoutY(30);
         b_serach.setLayoutX(900);
-
-
 
         //查看日志
         Button seeLog = new Button("购票历史");
@@ -58,8 +47,8 @@ public class UserMenu extends Start {
         re.raiseMoneyMenu(recharge,account);
 
         //获取昵称
-        Sql sql = new Sql();
-        Map<Integer,String> map = sql.getVirName(account);
+
+        Map<Integer,String> map = getVirName1.getVirName(account);
         Set<Integer> set = map.keySet();
         Iterator<Integer> it = set.iterator();
         Integer uid = it.next();
@@ -73,7 +62,7 @@ public class UserMenu extends Start {
         Stage stage = new Stage();
         //显示景点信息和票价
         Pagination pagination1 = new Pagination();
-        pagination1.setLayoutX(150);
+        pagination1.setLayoutX(100);
         pagination1.setLayoutY(100);
         pagination1.setMinSize(800,850);
         pagination1.setStyle("-fx-border-color:red;");
@@ -97,12 +86,12 @@ public class UserMenu extends Start {
     * 创建page显示信息
     * */
     public VBox createPage(int pageIndex,String account,Integer uid,Button seeLog,Button b_serach ,TextField t_serach,Stage stage) {
-
-        Sql sql = new Sql();
-        Map<ScenicInfoTable, TicketTable> result = sql.getScenicInfo();
+        GetScenicInfo getScenicInfo1 = new GetScenicInfo();
+        GetPayPassword getPayPassword1 = new GetPayPassword();
+        Map<ScenicInfoTable, TicketTable> result = getScenicInfo1.getScenicInfo();
         int size = result.size();
 
-        String payPassword = sql.getPayPassword(account);
+        String payPassword = getPayPassword1.getPayPassword(account);
         VBox box = new VBox(5);
         int page = pageIndex * 5;
         int i = page;

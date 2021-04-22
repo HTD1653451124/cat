@@ -1,10 +1,8 @@
 package com.ccj.event.controller;
 
-import com.ccj.event.dao.Sql;
+import com.ccj.event.service.GetPayPassword;
 import com.ccj.event.view.UserMenu;
-import javafx.application.Application;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -44,10 +42,11 @@ public class Recharge extends UserMenu {
     }
     public void raiseMoney(Button determin,String account,PasswordField pf,TextField tf){
         determin.setOnMouseClicked(event -> {
-            Sql sql = new Sql();
+            com.ccj.event.service.Recharge recharge1 = new com.ccj.event.service.Recharge();
+            GetPayPassword getPayPassword1 = new GetPayPassword();
             //首先检查密码是否正确，再添加到表中
-            if (pf.getText().equals(sql.getPayPassword(account))){
-                if (sql.recharge(account,tf.getText())){
+            if (pf.getText().equals(getPayPassword1.getPayPassword(account))){
+                if (recharge1.recharge(account,tf.getText())){
                     tips("充值成功");
                 }else {
                     tips("充值失败");

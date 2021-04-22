@@ -1,8 +1,8 @@
 package com.ccj.event.controller;
 
-import com.ccj.event.dao.Sql;
 import com.ccj.event.entity.LogTable;
 import com.ccj.event.entity.ScenicInfoTable;
+import com.ccj.event.service.Getlog;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -35,8 +35,9 @@ public class ViewLog extends Application {
     public VBox createPage(Integer pageIndex,Integer sid,Integer uid){
         VBox box = new VBox(5);
 
-            Sql sql = new Sql();
-            Map<LogTable, ScenicInfoTable> getlog = sql.getlog(uid,sid);
+            //Sql sql = new Sql();
+            Getlog getlog1 = new Getlog();
+            Map<LogTable, ScenicInfoTable> getlog = getlog1.getlog(uid,sid);
             int page = pageIndex * 10;
             int i = page;
             int size = getlog.size();
